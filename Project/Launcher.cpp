@@ -13,18 +13,21 @@
 #include "Lesson10_Platform.h"
 #include "Lesson11_ParallaxScrolling.h"
 #include "DinoGame.h"
+#include "DinoMaulidzar.h"
+#include "DinoMenu.h"
+
 
 #include "LessonAI01_SteeringBehaviors.h"
 #include "LessonAI02_NPCWave.h"
 
 int main(int argc, char** argv) {
 	Engine::Setting* setting = new Engine::Setting();
-	setting->screenWidth = 800;
+	setting->screenWidth = 900;
 	setting->screenHeight = 600;
 	setting->windowFlag = Engine::WindowFlag::WINDOWED;
 	setting->vsync = false;
 	setting->targetFrameRate = 75;
-	Engine::Game* game = new Engine::DinoGame(setting);
+	Engine::Game* game = new Engine::DinoMenu(setting);
 	game->Run();
 	delete setting;
 	delete game;

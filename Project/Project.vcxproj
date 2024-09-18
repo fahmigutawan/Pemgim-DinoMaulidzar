@@ -150,6 +150,8 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="DinoGame.h" />
+    <ClInclude Include="DinoMaulidzar.h" />
+    <ClInclude Include="DinoMenu.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Lesson11_ParallaxScrolling.h" />
     <ClInclude Include="LessonAI01_SteeringBehaviors.h" />
@@ -188,6 +190,8 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="DinoGame.cpp" />
+    <ClCompile Include="DinoMaulidzar.cpp" />
+    <ClCompile Include="DinoMenu.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Lesson11_ParallaxScrolling.cpp" />
     <ClCompile Include="LessonAI01_SteeringBehaviors.cpp" />

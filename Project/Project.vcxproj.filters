@@ -140,6 +140,12 @@
     <ClInclude Include="DinoGame.h">
       <Filter>Demo Files</Filter>
     </ClInclude>
+    <ClInclude Include="DinoMaulidzar.h">
+      <Filter>Demo Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DinoMenu.h">
+      <Filter>Demo Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader.cpp">
@@ -251,6 +257,12 @@
       <Filter>Demo Files</Filter>
     </ClCompile>
     <ClCompile Include="DinoGame.cpp">
+      <Filter>Demo Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DinoMaulidzar.cpp">
+      <Filter>Demo Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DinoMenu.cpp">
       <Filter>Demo Files</Filter>
     </ClCompile>
   </ItemGroup>
