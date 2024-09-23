@@ -8,18 +8,19 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Text.h"
+#include "ScreenManager.h"
 
 
 
 namespace Engine {
-	class DinoMaulidzar :public Engine::Game
+	class DinoMaulidzar :public Engine::Screen
 	{
 	public:
 		DinoMaulidzar(Setting* setting);
 		~DinoMaulidzar();
 		virtual void Init();
 		virtual void Update();
-		virtual void Render();
+		virtual void Draw();
 	private:
 		void InitMaulidzar();
 		void InitEnvironment();
@@ -56,6 +57,9 @@ namespace Engine {
 		Engine::Sprite* spriteMaulidzar = NULL;
 
 		Text* text = NULL;
+		Text* loseText = NULL;
+
+
 
 
 		vector<Sprite*> spritesBackground, spritesGround, spritesObstacle;

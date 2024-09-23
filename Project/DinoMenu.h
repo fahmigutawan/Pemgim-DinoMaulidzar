@@ -5,6 +5,7 @@
 #include "Setting.h"
 #include "MainMenuScreen.h"
 #include "InGameScreen.h"
+#include "DinoMaulidzar.h"
 
 namespace Engine {
 	class DinoMenu :public Engine::Game

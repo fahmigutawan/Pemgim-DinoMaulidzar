@@ -34,9 +34,14 @@ void Engine::MainMenuScreen::Init()
 	currentButtonIndex = 0;
 	buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
 
+	
+
+	float screenWidth = game->GetSettings()->screenWidth;
+	float screenHeight = game->GetSettings()->screenHeight;
+
 	// Create Text
 	text = (new Text("8-bit Arcade In.ttf", 100, game->GetDefaultTextShader()))
-		->SetText("The Spawning Turtle")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 500, game->GetSettings()->screenHeight - 100.0f)->SetColor(235, 229, 52);
+		->SetText("Dino Hunter Run")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 340, game->GetSettings()->screenHeight - 100.0f)->SetColor(251, 182, 49);
 
 	// Add input mappings
 	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
@@ -49,7 +54,7 @@ void Engine::MainMenuScreen::Init()
 void Engine::MainMenuScreen::Update()
 {
 	// Set background
-	game->SetBackgroundColor(52, 155, 235);
+	game->SetBackgroundColor(76, 63, 68);
 
 	if (game->GetInputManager()->IsKeyReleased("next")) {
 		// Set previous button to normal state

@@ -12,7 +12,7 @@ Engine::DinoMenu::~DinoMenu()
 void Engine::DinoMenu::Init()
 {
 	Engine::ScreenManager::GetInstance(this)
-		->AddScreen("ingame", new InGameScreen())
+		->AddScreen("ingame",new DinoMaulidzar(setting))
 		->AddScreen("mainmenu", new MainMenuScreen())
 		->SetCurrentScreen("mainmenu");
 

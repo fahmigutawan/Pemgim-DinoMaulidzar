@@ -1,6 +1,6 @@
 #include "DinoMaulidzar.h"
 
-Engine::DinoMaulidzar::DinoMaulidzar(Setting* setting) :Engine::Game(setting)
+Engine::DinoMaulidzar::DinoMaulidzar(Setting* setting)
 {
 	setting->windowTitle = "DINO GAME";
 }
@@ -16,9 +16,9 @@ void Engine::DinoMaulidzar::Init()
 	InitMaulidzar();
 	InitObstacle();
 
-	text = new Text("lucon.ttf", 24, defaultTextShader);
-	text->SetScale(1.0f)->SetColor(255, 255, 255)->SetPosition(0, setting->screenHeight - (text->GetFontSize() * text->GetScale()));
-
+	text = new Text("lucon.ttf", 24, game->GetDefaultTextShader());
+	text->SetScale(1.0f)->SetColor(255, 255, 255)->SetPosition(0, game->GetSettings()->screenHeight - (text->GetFontSize() * text->GetScale()));
+	loseText = (new Text("8-bit Arcade In.ttf", 150, game->GetDefaultTextShader()))->SetPosition(0, 0);
 }
 
 void Engine::DinoMaulidzar::Update()
@@ -33,25 +33,30 @@ void Engine::DinoMaulidzar::Update()
 		speed += 0.000005;
 	}
 	else {
+		loseText->SetText("YOU LOSE")
+				->SetPosition(160, 280)
+				->SetColor(239, 1, 1);
+
 		speed = defaultSpeed;
 	}
 
 	text->SetText(("Score = " + to_string(score)) );
 }
 
-void Engine::DinoMaulidzar::Render()
+void Engine::DinoMaulidzar::Draw()
 {
 	RenderEnvironment();
 	RenderMaulidzar();
 	RenderObstacles();
 	text->Draw();
+	loseText->Draw();
 
 }
 
 void Engine::DinoMaulidzar::InitMaulidzar()
 {
 	textureMaulidzar = new Texture("maulidzar.png");
-	spriteMaulidzar = new Sprite(textureMaulidzar, defaultSpriteShader, defaultQuad);
+	spriteMaulidzar = new Sprite(textureMaulidzar, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
 
 	spriteMaulidzar
 		->SetNumXFrames(10)
@@ -64,8 +69,8 @@ void Engine::DinoMaulidzar::InitMaulidzar()
 	spriteMaulidzar->SetBoundingBoxSize(spriteMaulidzar->GetScaleWidth() - 120,
 		spriteMaulidzar->GetScaleHeight() - 120);
 
-	inputManager
-		->AddInputMapping("arrow-up", SDLK_UP);
+	game->GetInputManager()->AddInputMapping("arrow-up", SDLK_UP);
+	game->GetInputManager()->AddInputMapping("mainmenu", SDLK_ESCAPE);
 }
 
 void Engine::DinoMaulidzar::InitObstacle()
@@ -73,10 +78,10 @@ void Engine::DinoMaulidzar::InitObstacle()
 	textureObstacle = new Texture("cactus.png");
 
 	for (int i = 0; i <= obstacleMaxCount; i++) {
-		Sprite* obs = new Sprite(textureObstacle, defaultSpriteShader, defaultQuad);
+		Sprite* obs = new Sprite(textureObstacle, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
 
 		obs	
-			->SetPosition(setting->screenWidth, 0)
+			->SetPosition(game->GetSettings()->screenWidth, 0)
 			->SetScale(0.2f);
 
 		obs->SetBoundingBoxSize(obs->GetScaleWidth() - 120,
@@ -95,16 +100,16 @@ void Engine::DinoMaulidzar::InitEnvironment()
 	int counter = 0;
 
 	for (int i = 0; i <= environmentMaxCount; i++) {
-		float offsetX = counter * setting->screenWidth;
-		Sprite* back = new Sprite(textureBackground, defaultSpriteShader, defaultQuad);
-		Sprite* ground = new Sprite(textureGround, defaultSpriteShader, defaultQuad);
+		float offsetX = counter * game->GetSettings()->screenWidth;
+		Sprite* back = new Sprite(textureBackground, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
+		Sprite* ground = new Sprite(textureGround, game->GetDefaultSpriteShader(), game->GetDefaultQuad());
 
 		back
-			->SetSize(setting->screenWidth + environmentOffset, setting->screenHeight)
+			->SetSize(game->GetSettings()->screenWidth + environmentOffset, game->GetSettings()->screenHeight)
 			->SetPosition(offsetX, 0);
 
 		ground
-			->SetSize(setting->screenWidth + environmentOffset, 200)
+			->SetSize(game->GetSettings()->screenWidth + environmentOffset, 200)
 			->SetPosition(offsetX, 0);
 
 		spritesBackground.push_back(back);
@@ -121,15 +126,19 @@ void Engine::DinoMaulidzar::UpdateMaulidzar()
 	spriteMaulidzar
 		->PlayAnim("run");
 
-	if (inputManager->IsKeyPressed("arrow-up") && !isJump) {
+	if (game->GetInputManager()->IsKeyPressed("arrow-up") && !isJump) {
 		Jump();
 	}
 
-	yMaulidzar += yVelocity * GetGameTime();
+	if (game->GetInputManager()->IsKeyReleased("mainmenu")) {
+		ScreenManager::GetInstance(game)->SetCurrentScreen("mainmenu");
+	}
+
+	yMaulidzar += yVelocity * game->GetGameTime();
 
 	spriteMaulidzar
 		->SetPosition(xMaulidzar, yMaulidzar)
-		->Update(GetGameTime());
+		->Update(game->GetGameTime());
 }
 
 void Engine::DinoMaulidzar::UpdateObstacles() {
@@ -140,7 +149,7 @@ void Engine::DinoMaulidzar::UpdateObstacles() {
 		MoveObstacleToScreen(s);
 	}
 
-	obstacleDelayWaitTimeCounter += GetGameTime();
+	obstacleDelayWaitTimeCounter += game->GetGameTime();
 }
 
 void Engine::DinoMaulidzar::UpdateEnvironment() {
@@ -148,14 +157,14 @@ void Engine::DinoMaulidzar::UpdateEnvironment() {
 	int counterGround = 0;
 
 	for (Sprite* s : spritesBackground) {
-		float offsetX = counterBackground * setting->screenWidth;
+		float offsetX = counterBackground * game->GetSettings()->screenWidth;
 
-		if (s->GetPosition().x < -setting->screenWidth - offsetX) {
-			s->SetPosition(setting->screenWidth + offsetX, 0);
+		if (s->GetPosition().x < -game->GetSettings()->screenWidth - offsetX) {
+			s->SetPosition(game->GetSettings()->screenWidth + offsetX, 0);
 		}
 
-		s->SetPosition(s->GetPosition().x - speed * GetGameTime(), 0);
-		s->Update(GetGameTime());
+		s->SetPosition(s->GetPosition().x - speed * game->GetGameTime(), 0);
+		s->Update(game->GetGameTime());
 
 		counterBackground++;
 		if (counterBackground >= spritesBackground.size() - 1) {
@@ -164,14 +173,14 @@ void Engine::DinoMaulidzar::UpdateEnvironment() {
 	}
 
 	for (Sprite* s : spritesGround) {
-		float offsetX = counterGround * setting->screenWidth;
+		float offsetX = counterGround * game->GetSettings()->screenWidth;
 
-		if (s->GetPosition().x < -setting->screenWidth - offsetX) {
-			s->SetPosition(setting->screenWidth + offsetX, 0);
+		if (s->GetPosition().x < -game->GetSettings()->screenWidth - offsetX) {
+			s->SetPosition(game->GetSettings()->screenWidth + offsetX, 0);
 		}
 
-		s->SetPosition(s->GetPosition().x - speed * GetGameTime(), 0);
-		s->Update(GetGameTime());
+		s->SetPosition(s->GetPosition().x - speed * game->GetGameTime(), 0);
+		s->Update(game->GetGameTime());
 
 		counterGround++;
 		if (counterGround >= spritesGround.size() - 1) {
@@ -235,7 +244,7 @@ void Engine::DinoMaulidzar::PlayJumpAnimation()
 
 void Engine::DinoMaulidzar::Jump()
 {
-	float ratio = (GetGameTime() / 16.7f);
+	float ratio = (game->GetGameTime() / 16.7f);
 	gravity = 0.12f * ratio;
 	yVelocity = 2.2f;
 	isJump = true;
@@ -267,9 +276,9 @@ void Engine::DinoMaulidzar::CollisionDetector() {
 }
 
 void Engine::DinoMaulidzar::MoveObstacleToScreen(Sprite* s) {
-	if(s->GetPosition().x < -setting->screenWidth) {
-		s->SetPosition(setting->screenWidth, 0);
+	if(s->GetPosition().x < -game->GetSettings()->screenWidth) {
+		s->SetPosition(game->GetSettings()->screenWidth, 0);
 	}
 
-	s->SetPosition(s->GetPosition().x - speed * GetGameTime(), 0);
+	s->SetPosition(s->GetPosition().x - speed * game->GetGameTime(), 0);
 }
