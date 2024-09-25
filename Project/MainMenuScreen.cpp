@@ -69,7 +69,7 @@ void Engine::MainMenuScreen::Update()
 		// Set previous button to normal state
 		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::NORMAL);
 		// Prev Button
-		currentButtonIndex = currentButtonIndex > 0 ? currentButtonIndex - 1 : currentButtonIndex;
+		currentButtonIndex = (currentButtonIndex > 0) ? currentButtonIndex - 1 : currentButtonIndex;
 		// Set current button to hover state
 		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
 	}
