@@ -23,7 +23,7 @@ namespace Engine {
 	private:
 		vector<Button*> buttons;
 		Text* text;
-		int currentButtonIndex = 0;
+		int currentButtonIndex;
 	};
 }
 

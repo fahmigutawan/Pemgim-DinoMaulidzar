@@ -44,8 +44,8 @@ void Engine::MainMenuScreen::Init()
 		->SetText("Dino Hunter Run")->SetPosition(game->GetSettings()->screenWidth * 0.5f - 340, game->GetSettings()->screenHeight - 100.0f)->SetColor(251, 182, 49);
 
 	// Add input mappings
-	game->GetInputManager()->AddInputMapping("next", SDLK_DOWN)
-		->AddInputMapping("prev", SDLK_UP)
+	game->GetInputManager()->AddInputMapping("next", SDLK_s)
+		->AddInputMapping("prev", SDLK_w)
 		->AddInputMapping("press", SDLK_RETURN);
 
 }
@@ -56,7 +56,7 @@ void Engine::MainMenuScreen::Update()
 	// Set background
 	game->SetBackgroundColor(76, 63, 68);
 
-	if (game->GetInputManager()->IsKeyReleased("next")) {
+	if (game->GetInputManager()->IsKeyPressed("next") && !game->GetInputManager()->IsKeyReleased("next")) {
 		// Set previous button to normal state
 		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::NORMAL);
 		// Next Button
@@ -65,7 +65,7 @@ void Engine::MainMenuScreen::Update()
 		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::HOVER);
 	}
 
-	if (game->GetInputManager()->IsKeyReleased("prev")) {
+	if (game->GetInputManager()->IsKeyPressed("prev") && !game->GetInputManager()->IsKeyReleased("prev")) {
 		// Set previous button to normal state
 		buttons[currentButtonIndex]->SetButtonState(Engine::ButtonState::NORMAL);
 		// Prev Button

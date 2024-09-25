@@ -17,8 +17,13 @@ void Engine::DinoMaulidzar::Init()
 	InitObstacle();
 
 	text = new Text("lucon.ttf", 24, game->GetDefaultTextShader());
-	text->SetScale(1.0f)->SetColor(255, 255, 255)->SetPosition(0, game->GetSettings()->screenHeight - (text->GetFontSize() * text->GetScale()));
 	loseText = (new Text("8-bit Arcade In.ttf", 150, game->GetDefaultTextShader()))->SetPosition(0, 0);
+	endText = (new Text("8-bit Arcade In.ttf", 24, game->GetDefaultTextShader()))->SetPosition(0, 0);
+
+	game
+		->GetInputManager()
+		->AddInputMapping("arrow-up", SDLK_SPACE)
+		->AddInputMapping("mainmenu", SDLK_ESCAPE);
 }
 
 void Engine::DinoMaulidzar::Update()
@@ -31,16 +36,36 @@ void Engine::DinoMaulidzar::Update()
 		CollisionDetector();
 
 		speed += 0.000005;
+		text
+			->SetScale(1.0f)
+			->SetColor(255, 255, 255)
+			->SetPosition(0, game->GetSettings()->screenHeight - (text->GetFontSize() * text->GetScale()))
+			->SetText(("Score = " + to_string(score)));
 	}
 	else {
 		loseText->SetText("YOU LOSE")
 				->SetPosition(160, 280)
 				->SetColor(239, 1, 1);
 
+		endText->SetText("Press ESC to Menu")
+			->SetPosition(360, 250)
+			->SetColor(255, 255, 255);
+
 		speed = defaultSpeed;
 	}
+	
+	if (game->GetInputManager()->IsKeyPressed("mainmenu")) {
+		ScreenManager::GetInstance(game)
+			->SetCurrentScreen("mainmenu");
+		isPlay = true;
+		score = 0;
+		loseText->SetText("");
+		endText->SetText("");
 
-	text->SetText(("Score = " + to_string(score)) );
+		spritesObstacle.clear();
+		InitObstacle();
+
+	}
 }
 
 void Engine::DinoMaulidzar::Draw()
@@ -50,7 +75,7 @@ void Engine::DinoMaulidzar::Draw()
 	RenderObstacles();
 	text->Draw();
 	loseText->Draw();
-
+	endText->Draw();
 }
 
 void Engine::DinoMaulidzar::InitMaulidzar()
@@ -68,9 +93,6 @@ void Engine::DinoMaulidzar::InitMaulidzar()
 
 	spriteMaulidzar->SetBoundingBoxSize(spriteMaulidzar->GetScaleWidth() - 120,
 		spriteMaulidzar->GetScaleHeight() - 120);
-
-	game->GetInputManager()->AddInputMapping("arrow-up", SDLK_UP);
-	game->GetInputManager()->AddInputMapping("mainmenu", SDLK_ESCAPE);
 }
 
 void Engine::DinoMaulidzar::InitObstacle()

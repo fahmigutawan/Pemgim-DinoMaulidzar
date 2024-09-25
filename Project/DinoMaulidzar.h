@@ -58,9 +58,7 @@ namespace Engine {
 
 		Text* text = NULL;
 		Text* loseText = NULL;
-
-
-
+		Text* endText = NULL;
 
 		vector<Sprite*> spritesBackground, spritesGround, spritesObstacle;
 
